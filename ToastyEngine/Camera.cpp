@@ -30,7 +30,6 @@ void Camera::handleMouseMovement(double xOffset, double yOffset, GLboolean const
             transform.rotation.y = -89.0f;
     }
 
-    // update Front, Right and Up Vectors using the updated Euler angles
     updateVectors();
 }
 

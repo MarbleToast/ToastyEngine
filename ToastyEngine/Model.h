@@ -25,7 +25,6 @@ class Model {
         void loadModel(const std::string_view path);
         void processNode(aiNode* node, const aiScene* scene);
         Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-        std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, Texture::TextureType internalType);
 };
 
 using ModelPtr = std::shared_ptr<Model>;

@@ -5,8 +5,8 @@
 class Texture
 {
 public:
-	const enum class TextureType {
-		DIFFUSE,
+	enum TextureType {
+		DIFFUSE = 0,
 		NORMAL,
 		SPECULAR,
 		DISPLACEMENT

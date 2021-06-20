@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef RESOURCE_CACHE
+#define RESOURCE_CACHE
+
 #include "Texture.h"
 #include "Mesh.h"
 #include "Material.h"
@@ -8,6 +11,7 @@
 
 #include <unordered_map>
 #include <stb_image.h>
+#include <optional>
 
 namespace ResourceCache {
 	inline std::unordered_map<std::string, size_t> textureCache{};
@@ -15,10 +19,19 @@ namespace ResourceCache {
 	inline std::unordered_map<std::string, ModelPtr> modelCache{};
 	inline std::unordered_map<std::string, MaterialPtr> materialCache{};
 
-	inline size_t loadTexture(const std::string_view path) {
+    inline std::optional<size_t> getTexture(const std::string_view path) {
+        Diagnostics::Log("Looking for cached texture {}...", path);
         const auto res = textureCache.find(path.data());
-        if (res != textureCache.end()) 
+        if (res != textureCache.end())
             return res->second;
+        return {};
+    }
+
+	inline size_t loadTexture(const std::string_view path) {
+        const auto cachedId = getTexture(path);
+        if (cachedId) return *cachedId;
+
+        Diagnostics::Log("Loading texture {}...", path);
 
         size_t id;
         glGenTextures(1, &id);
@@ -49,5 +62,34 @@ namespace ResourceCache {
 
         return textureCache.try_emplace(path.data(), id).first->second;
 	}
+
+    inline std::optional<MaterialPtr> getMaterial(const std::string_view name) {
+        Diagnostics::Log("Looking for cached material {}...", name);
+        const auto res = materialCache.find(name.data());
+        if (res != materialCache.end())
+            return res->second;
+        return {};
+    }
+
+    inline MaterialPtr createMaterial(
+        const std::string_view name,
+        const std::string_view diffusePath,
+        const std::string_view normalPath,
+        const std::string_view specularPath,
+        const std::string_view displacementPath
+    ) {
+        const auto cachedName = getMaterial(name);
+        if (cachedName) return *cachedName;
+
+        Diagnostics::Log("Creating material {}...", name);
+
+        return materialCache.try_emplace(
+            name.data(),
+            std::make_shared<Material>(
+                Material(name, diffusePath, normalPath, specularPath, displacementPath)
+            )
+        ).first->second;
+    }
 };
 
+#endif

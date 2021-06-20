@@ -3,43 +3,37 @@
 Mesh::Mesh(
 	std::vector<MeshVertex> vertices,
 	std::vector<unsigned int> indices,
-	std::vector<Texture> textures
-): vertices(vertices), indices(indices), textures(textures) {
+	MaterialPtr material
+): vertices(vertices), indices(indices), material(material) {
 	setupMesh();
 }
 
 void Mesh::Draw(Shader& shader) {
-    unsigned int diffuseNr = 1;
-    unsigned int specularNr = 1;
-    unsigned int normalNr = 1;
-    unsigned int displacementNr = 1;
-
-    for (unsigned int i = 0; i < textures.size(); i++) {
+    for (size_t i = 0; i < 4;) {
         glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
 
-        // retrieve texture number (the N in diffuse_textureN)
-        Texture::TextureType type = textures[i].type;
-        std::string name;
+        std::string textureName;
 
-        switch (type) {
+        switch (i) {
             case Texture::TextureType::DIFFUSE:
-                name = "texture_diffuse" + std::to_string(diffuseNr++);
+                textureName = "texture_diffuse";
                 break;
             case Texture::TextureType::NORMAL:
-                name = "texture_normal" + std::to_string(specularNr++);
+                textureName = "texture_normal";
                 break;
             case Texture::TextureType::SPECULAR:
-                name = "texture_specular" + std::to_string(diffuseNr++);
+                textureName = "texture_specular";
                 break;
             case Texture::TextureType::DISPLACEMENT:
-                name = "texture_displacement" + std::to_string(diffuseNr++);
+                textureName = "texture_displacement";
                 break;
             default:
                 break;
         }   
-
-        shader.setInt(name.c_str(), i);
-        glBindTexture(GL_TEXTURE_2D, textures[i].id);
+        const auto texture = material->getMaterialTexture((Texture::TextureType)i);
+        shader.setInt(textureName.c_str(), texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        ++i;
     }
     
     // draw mesh

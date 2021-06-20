@@ -2,6 +2,7 @@
 
 #include "Model.h"
 #include "Diagnostics.h"
+#include "ResourceCache.h"
 
 void Model::Draw(Shader& shader) {
     for (unsigned int i = 0; i < meshes.size();) {
@@ -27,7 +28,8 @@ void Model::loadModel(const std::string_view path) {
     }
     else { 
         // retrieve the directory path of the filepath
-        directory = path.substr(0, path.find_last_of('/')); 
+        directory = path.substr(0, path.find_last_of('/'));
+        directory += '/';
         processNode(scene->mRootNode, scene); 
     }
 }
@@ -48,7 +50,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 
     std::vector<MeshVertex> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture> textures;
+    std::vector<size_t> textures;
 
     for (size_t i = 0; i < mesh->mNumVertices;) {
         MeshVertex vertex;
@@ -107,53 +109,33 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     // process materials
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-    // 1. diffuse maps
-    std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, Texture::TextureType::DIFFUSE);
-    textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+    std::string materialName = material->GetName().C_Str();
+    
+    const auto cachedMaterial = ResourceCache::getMaterial(materialName);
+    if (cachedMaterial) {
+        return Mesh(vertices, indices, *cachedMaterial);
+    }
 
-    // 2. specular maps
-    std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, Texture::TextureType::SPECULAR);
-    textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+    aiString diffuseTexName;
+    material->GetTexture(aiTextureType_DIFFUSE, 0, &diffuseTexName);
 
-    // 3. normal maps
-    std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, Texture::TextureType::NORMAL);
-    textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+    aiString normalTexName;
+    material->GetTexture(aiTextureType_HEIGHT, 0, &normalTexName);
 
-    // 4. height maps
-    std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, Texture::TextureType::DISPLACEMENT);
-    textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+    aiString specularTexName;
+    material->GetTexture(aiTextureType_SPECULAR, 0, &specularTexName);
+
+    aiString displacementTexName;
+    material->GetTexture(aiTextureType_AMBIENT, 0, &displacementTexName);
+
+    MaterialPtr newMaterial = ResourceCache::createMaterial(
+        materialName,
+        directory + diffuseTexName.C_Str(),
+        normalTexName.length == 0 ? "" : directory + normalTexName.C_Str(),
+        specularTexName.length == 0 ? "" : directory + specularTexName.C_Str(),
+        displacementTexName.length == 0 ? "" : directory + displacementTexName.C_Str()
+    );
 
     // return a mesh object created from the extracted mesh data
-    return Mesh(vertices, indices, textures);
-}
-
-std::vector<size_t> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, Texture::TextureType internalType) {
-    std::vector<size_t> textures;
-    for (unsigned int i = 0; i < mat->GetTextureCount(type);) {
-        aiString str;
-        mat->GetTexture(type, i, &str);
-
-        std::string fullPath = directory + '/' + str.C_Str();
-
-        // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
-        bool skip = false;
-        for (unsigned int j = 0; j < texturesLoaded.size();) {
-            if (std::strcmp(texturesLoaded[j], fullPath.c_str()) == 0) {
-                textures.push_back(texturesLoaded[j]);
-                skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
-                break;
-            }
-            ++j;
-        }
-
-        if (!skip) {   
-            // if texture hasn't been loaded already, load it
-
-            Texture texture(fullPath.c_str(), internalType);
-            textures.push_back(texture);
-            texturesLoaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
-        }
-        ++i;
-    }
-    return textures;
+    return Mesh(vertices, indices, newMaterial);
 }

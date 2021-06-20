@@ -2,23 +2,10 @@
 #include "Vector.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Material.h"
 
 #include <string>
 #include <vector>
-
-struct PosVertex {
-    Vec3 position;
-};
-
-struct TexCoordVertex {
-    Vec2 texCoords;
-};
-
-struct DiffVertex {
-    Vec3 normal;
-    Vec3 tangent;
-    Vec3 bitangent;
-};
 
 struct MeshVertex {
     Vec3 position;
@@ -35,9 +22,9 @@ class Mesh {
         // mesh data
         std::vector<MeshVertex> vertices;
         std::vector<unsigned int> indices;
-        std::vector<Texture> textures;
+        MaterialPtr material;
 
-        Mesh(std::vector<MeshVertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+        Mesh(std::vector<MeshVertex> vertices, std::vector<unsigned int> indices, MaterialPtr material);
         void Draw(Shader& shader);
 
         unsigned int VAO;
