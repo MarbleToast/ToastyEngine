@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\window">
+      <UniqueIdentifier>{c66dfbc1-038c-4dff-852e-3d6d892c43bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\object">
+      <UniqueIdentifier>{57e36e8c-3355-49c9-8729-6ec87510cfb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\types">
+      <UniqueIdentifier>{ed286946-4c22-4890-bd16-c01a7aeef9cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\object\camera">
+      <UniqueIdentifier>{d1fa4e67-82c9-4689-ab97-39282e785bf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shader">
+      <UniqueIdentifier>{0c57fc8d-40f8-431c-8ead-3955c93a905a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\object\player">
+      <UniqueIdentifier>{a2a590b0-d8c2-428b-b76d-209433781123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\texture">
+      <UniqueIdentifier>{5dd59d4e-d7ee-458b-a1b1-888f89efc08a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input">
+      <UniqueIdentifier>{799cf201-c75e-4036-871b-2cb09da6731d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\timer">
+      <UniqueIdentifier>{1eabbf04-3b85-4a7c-a30b-4109b2160aab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\deps">
+      <UniqueIdentifier>{d3f4a743-cbe2-4847-bc7c-9a8c6aadb526}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\deps\glad">
+      <UniqueIdentifier>{fa7286ba-a8c2-479f-a23d-9f5da4db9a4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\diagnostics">
+      <UniqueIdentifier>{63008088-424f-4917-9e19-5aa07fd33d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shader\shaders">
+      <UniqueIdentifier>{cbbd2d88-176e-4d7b-9cab-a0a1a7918233}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer">
+      <UniqueIdentifier>{9b6ec912-702a-4a83-b5af-1341e43a0ef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\object\static">
+      <UniqueIdentifier>{45156e78-ab99-408c-b15d-9d10e46dc3a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\material">
+      <UniqueIdentifier>{162874fe-ad94-4796-865b-358efe4b5398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\cache">
+      <UniqueIdentifier>{e4bd8ca3-20dd-4063-bfac-df371f53b4e1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="App.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files\window</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\object</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\object\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\object\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\types</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="include\glad\src\gl.c">
+      <Filter>Source Files\deps\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\types</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\types</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceCache.cpp">
+      <Filter>Source Files\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\material</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Window.h">
+      <Filter>Source Files\window</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Source Files\object</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Source Files\types</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Source Files\types</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Source Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files\object\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Source Files\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Source Files\types</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Source Files\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Source Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Source Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Source Files\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Diagnostics.h">
+      <Filter>Source Files\diagnostics</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Source Files\types</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Source Files\types</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Source Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceCache.h">
+      <Filter>Source Files\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Source Files\material</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="standard.fragment.glsl">
+      <Filter>Source Files\shader\shaders</Filter>
+    </None>
+    <None Include="standard.vertex.glsl">
+      <Filter>Source Files\shader\shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="me.png" />
+  </ItemGroup>
+</Project>
