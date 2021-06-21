@@ -17,6 +17,13 @@ Material::Material(
 	name(name) 
 {}
 
+void Material::release() {
+	for (size_t i = 0; i < materialTextures.size();) {
+		ResourceCache::releaseTexture(materialTextures[i]);
+		++i;
+	}
+}
+
 size_t Material::getMaterialTexture(const Texture::TextureType type) const noexcept {
 	return materialTextures[type];
 }

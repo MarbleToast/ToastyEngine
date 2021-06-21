@@ -7,7 +7,6 @@
 #include "Diagnostics.h"
 
 #include <iostream>
-#include <stb_image.h>
 
 void preInit() {
 	if (!glfwInit()) {

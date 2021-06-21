@@ -4,14 +4,14 @@
 #include "Diagnostics.h"
 #include "ResourceCache.h"
 
-void Model::Draw(Shader& shader) {
+void Model::Draw(Shader& shader) noexcept {
     for (unsigned int i = 0; i < meshes.size();) {
         meshes[i].Draw(shader);
         ++i;
     }
 }
 
-void Model::loadModel(const std::string_view path) {
+void Model::loadModel(const std::string_view path) throw() {
 	Assimp::Importer assimp;
 	const aiScene* scene = assimp.ReadFile(
         std::string{ path },
@@ -47,7 +47,6 @@ void Model::processNode(aiNode* node, const aiScene* scene) {
 }
 
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
-
     std::vector<MeshVertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<size_t> textures;
@@ -126,7 +125,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     material->GetTexture(aiTextureType_SPECULAR, 0, &specularTexName);
 
     aiString displacementTexName;
-    material->GetTexture(aiTextureType_AMBIENT, 0, &displacementTexName);
+    material->GetTexture(aiTextureType_SHININESS, 0, &displacementTexName);
 
     MaterialPtr newMaterial = ResourceCache::createMaterial(
         materialName,
@@ -138,4 +137,9 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 
     // return a mesh object created from the extracted mesh data
     return Mesh(vertices, indices, newMaterial);
+}
+
+void Model::release() {
+    for (auto &m : meshes)
+        ResourceCache::releaseVertexBuffer(m.VAO);
 }

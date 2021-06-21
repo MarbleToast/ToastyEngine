@@ -100,9 +100,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceCache.cpp">
-      <Filter>Source Files\cache</Filter>
-    </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Source Files\material</Filter>
     </ClCompile>

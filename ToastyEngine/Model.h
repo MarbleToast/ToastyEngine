@@ -13,8 +13,8 @@ class Model {
         Model(const std::string_view path) {
             loadModel(path);
         }
-        void Draw(Shader& shader);
-
+        void Draw(Shader& shader) noexcept;
+        void release();
     private:
         // model data
         std::vector<Mesh> meshes;
@@ -22,9 +22,10 @@ class Model {
 
         std::string directory;
 
-        void loadModel(const std::string_view path);
+        void loadModel(const std::string_view path) throw();
         void processNode(aiNode* node, const aiScene* scene);
         Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+        
 };
 
 using ModelPtr = std::shared_ptr<Model>;

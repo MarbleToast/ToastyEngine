@@ -15,6 +15,7 @@ class Material {
 			const std::string_view specularPath,
 			const std::string_view displacementPath
 		);
+		void release();
 
 		size_t getMaterialTexture(const Texture::TextureType type) const noexcept;
 };

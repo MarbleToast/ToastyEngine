@@ -20,7 +20,7 @@ void Application::run() {
     Shader standardShader("standard.vertex.glsl", "standard.fragment.glsl");
     Model backpack("assets/backpack/backpack.obj");
 
-    Player player({1, 0, 0});
+    Player player({5, 0, 0});
     Camera mainCamera({1, 0, 0});
 
     Keyboard::addListener(player);
@@ -51,7 +51,7 @@ void Application::run() {
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));	// it's a bit too big for our scene, so scale it down
         standardShader.setMat4("model", model);
         backpack.Draw(standardShader);
 

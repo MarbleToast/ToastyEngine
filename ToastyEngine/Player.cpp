@@ -19,5 +19,10 @@ void Player::handleInput() {
 	if (Keyboard::keyMap[GLFW_KEY_D]) {
 		transform.position -= right * velocity;
 	}
-
+	if (Keyboard::keyMap[GLFW_KEY_SPACE]) {
+		transform.position += up * velocity;
+	}
+	if (Keyboard::keyMap[GLFW_KEY_LEFT_SHIFT]) {
+		transform.position -= up * velocity;
+	}
 }

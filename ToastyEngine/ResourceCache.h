@@ -19,8 +19,26 @@ namespace ResourceCache {
 	inline std::unordered_map<std::string, ModelPtr> modelCache{};
 	inline std::unordered_map<std::string, MaterialPtr> materialCache{};
 
+    inline void releaseTexture(const size_t& id) {
+        glDeleteTextures(1, &id);
+    }
+
+    inline void releaseVertexBuffer(const size_t& id) {
+        glDeleteVertexArrays(1, &id);
+    }
+
+    inline void releaseAll() {
+        // Release all textures in a material
+        for (auto i : materialCache) 
+            i.second->release();
+
+        // Release models (and all their meshes)
+        for (auto j : modelCache)
+            j.second->release();
+    }
+
     inline std::optional<size_t> getTexture(const std::string_view path) {
-        Diagnostics::Log("Looking for cached texture {}...", path);
+        Diagnostics::Log("[{}] Looking for cached texture {}...", __FUNCTION__, path);
         const auto res = textureCache.find(path.data());
         if (res != textureCache.end())
             return res->second;
@@ -31,7 +49,7 @@ namespace ResourceCache {
         const auto cachedId = getTexture(path);
         if (cachedId) return *cachedId;
 
-        Diagnostics::Log("Loading texture {}...", path);
+        Diagnostics::Log("[{}] Loading texture {}...", __FUNCTION__, path);
 
         size_t id;
         glGenTextures(1, &id);
@@ -64,7 +82,6 @@ namespace ResourceCache {
 	}
 
     inline std::optional<MaterialPtr> getMaterial(const std::string_view name) {
-        Diagnostics::Log("Looking for cached material {}...", name);
         const auto res = materialCache.find(name.data());
         if (res != materialCache.end())
             return res->second;
@@ -81,7 +98,7 @@ namespace ResourceCache {
         const auto cachedName = getMaterial(name);
         if (cachedName) return *cachedName;
 
-        Diagnostics::Log("Creating material {}...", name);
+        Diagnostics::Log("[{}] Creating material {}...", __FUNCTION__, name);
 
         return materialCache.try_emplace(
             name.data(),

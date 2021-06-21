@@ -4,6 +4,7 @@
 #include "Vector.h"
 #include "Camera.h"
 #include "Player.h"
+#include "ResourceCache.h"
 
 #include "include/glm/gtc/matrix_transform.hpp"
 #include <exception>
@@ -35,6 +36,7 @@ class Application {
 		
 		~Application() {
 			delete window;
+			ResourceCache::releaseAll();
 			glfwTerminate();
 		}
 };
