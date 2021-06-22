@@ -13,8 +13,21 @@
 
 
 class Application {
+	public: 
+		enum ApplicationState {
+			LOADING,
+			RUNNING,
+			PAUSED,
+			MENU
+		};
+
 	private:
 		Window* window;
+		ApplicationState currentState;
+		
+		void initShaders();
+
+		void init();
 
 	public:
 		Application(
@@ -23,15 +36,15 @@ class Application {
 			const std::string_view name,
 			bool fullscreen
 		):
-			window(new Window(width, height, name, fullscreen))
-		{
-
-		};
+			window(new Window(width, height, name, fullscreen)),
+			currentState(ApplicationState::MENU)
+		{};
 
 		constexpr auto getWrappedWindow() const -> Window* {
 			return window;
 		};
 
+		
 		void run();
 		
 		~Application() {

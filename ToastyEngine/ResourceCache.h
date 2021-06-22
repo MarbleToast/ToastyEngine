@@ -12,12 +12,16 @@
 #include <unordered_map>
 #include <stb_image.h>
 #include <optional>
+#include <fstream>
 
 namespace ResourceCache {
+
+    // Caches
 	inline std::unordered_map<std::string, size_t> textureCache{};
 	inline std::unordered_map<std::string, MeshPtr> meshCache{};
 	inline std::unordered_map<std::string, ModelPtr> modelCache{};
 	inline std::unordered_map<std::string, MaterialPtr> materialCache{};
+    inline std::unordered_map<std::string, Shader> shaderCache{};
 
     inline void releaseTexture(const size_t& id) {
         glDeleteTextures(1, &id);
@@ -27,14 +31,22 @@ namespace ResourceCache {
         glDeleteVertexArrays(1, &id);
     }
 
+    inline void releaseShader(const size_t& id) {
+        glDeleteProgram(id);
+    }
+
     inline void releaseAll() {
         // Release all textures in a material
+
         for (auto i : materialCache) 
             i.second->release();
 
         // Release models (and all their meshes)
         for (auto j : modelCache)
             j.second->release();
+
+        for (auto j : shaderCache)
+            releaseShader(j.second.id);
     }
 
     inline std::optional<size_t> getTexture(const std::string_view path) {
@@ -80,6 +92,73 @@ namespace ResourceCache {
 
         return textureCache.try_emplace(path.data(), id).first->second;
 	}
+
+    inline std::optional<Shader> getShader(const std::string_view name) {
+        Diagnostics::Log("[{}] Looking for cached shader {}...", __FUNCTION__, name);
+        const auto res = shaderCache.find(name.data());
+        if (res != shaderCache.end())
+            return res->second;
+        return {};
+    }
+
+    inline Shader loadShader(
+        const std::string_view name,
+        const std::string_view vertPath,
+        const std::string_view fragPath,
+        const std::string_view geoPath
+    ) {
+        const auto cachedShader = getShader(name);
+        if (cachedShader) return *cachedShader;
+
+        Diagnostics::Log("[{}] Loading shader {}...", __FUNCTION__, name);
+
+        std::string vertexCode;
+        std::string fragmentCode;
+        std::string geometryCode;
+        std::ifstream vShaderFile;
+        std::ifstream fShaderFile;
+
+        vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+        try {
+            vShaderFile.open(vertPath.data());
+            fShaderFile.open(fragPath.data());
+            std::stringstream vShaderStream, fShaderStream;
+
+            // read file's buffer contents into streams
+            vShaderStream << vShaderFile.rdbuf();
+            fShaderStream << fShaderFile.rdbuf();
+
+            // close file handlers
+            vShaderFile.close();
+            fShaderFile.close();
+
+            // convert stream into string
+            vertexCode = vShaderStream.str();
+            fragmentCode = fShaderStream.str();
+
+            // if geometry shader path is present, also load a geometry shader
+            if (geoPath.data() != "") {
+                std::ifstream gShaderFile;
+                gShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+                gShaderFile.open(geoPath.data());
+                std::stringstream gShaderStream;
+                gShaderStream << gShaderFile.rdbuf();
+                gShaderFile.close();
+                geometryCode = gShaderStream.str();
+            }
+        }
+        catch (std::ifstream::failure& err) {
+            Diagnostics::Throw("Shader file could not be read: {}.", err.what());
+        }
+
+        return shaderCache.try_emplace(
+            name.data(),
+            Shader(vertexCode.c_str(), fragmentCode.c_str(), geometryCode != "" ? geometryCode.c_str() : nullptr)
+        ).first->second;
+    }
 
     inline std::optional<MaterialPtr> getMaterial(const std::string_view name) {
         const auto res = materialCache.find(name.data());

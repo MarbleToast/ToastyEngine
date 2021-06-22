@@ -6,19 +6,32 @@
 #include "Timer.h"
 #include "Keyboard.h"
 #include "Model.h"
+#include "Renderer.h"
 
 #include <filesystem>
 #include <iostream>
 #include <vector>
 
+void Application::initShaders() {
+    ResourceCache::loadShader("standardShader", "standard.vertex.glsl", "standard.fragment.glsl", "");
+}
+
+void Application::init() {
+    initShaders();
+}
+
 void Application::run() {
+    init();
+
 	GLFWwindow* main = window->getWindow();
 
     glEnable(GL_DEPTH_TEST);
     glCullFace(GL_BACK);
 
-    Shader standardShader("standard.vertex.glsl", "standard.fragment.glsl");
     Model backpack("assets/backpack/backpack.obj");
+
+    Renderer renderer;
+    Shader standardShader = *ResourceCache::getShader("standardShader");
 
     Player player({5, 0, 0});
     Camera mainCamera({1, 0, 0});
