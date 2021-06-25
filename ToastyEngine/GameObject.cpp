@@ -1,10 +1,11 @@
 #include "GameObject.h"
 
-GameObject::GameObject(const std::string_view id, Vec3 pos): identifier(id) {
-	transform.position = pos;
-    transform.rotation = { DEFAULT_YAW, DEFAULT_PITCH };
-	front = Vec3(0.0f, 0.0f, -1.0f);
-
+GameObject::GameObject(const std::string_view id, Transform transform, ModelPtr model):
+    identifier(id),
+    renderModel(model),
+    transform(transform),
+    front(Vec3(0.0f, 0.0f, -1.0f))
+{
 	updateVectors();
 }
 

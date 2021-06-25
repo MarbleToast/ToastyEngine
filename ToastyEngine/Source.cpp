@@ -1,4 +1,5 @@
 #define STB_IMAGE_IMPLEMENTATION
+#define _CRTDBG_MAP_ALLOC
 
 #include "App.h"
 #include "Window.h"
@@ -12,7 +13,6 @@ void preInit() {
 	if (!glfwInit()) {
 		Diagnostics::Throw("GLFW failed to initialise.");
 	}
-	stbi_set_flip_vertically_on_load(true);
 }
 
 int main() {

@@ -14,7 +14,7 @@
 
 class Application {
 	public: 
-		enum ApplicationState {
+		enum class ApplicationState {
 			LOADING,
 			RUNNING,
 			PAUSED,

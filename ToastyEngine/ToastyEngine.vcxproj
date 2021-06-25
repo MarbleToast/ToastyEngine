@@ -36,12 +36,14 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Diagnostics.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="RandomUtils.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceCache.h" />
     <ClInclude Include="Scene.h" />

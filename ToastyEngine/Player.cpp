@@ -5,7 +5,13 @@
 #include <GLFW/glfw3.h>
 
 void Player::handleInput() {
-	
+	if (Keyboard::keyMap[GLFW_KEY_LEFT_CONTROL]) {
+		movementSpeed = 2*baseMovementSpeed;
+	}
+	else {
+		movementSpeed = baseMovementSpeed;
+	}
+
 	float velocity = movementSpeed * Timer::getDeltaTime();
 	if (Keyboard::keyMap[GLFW_KEY_W]) {
 		transform.position += front * velocity;
@@ -25,4 +31,17 @@ void Player::handleInput() {
 	if (Keyboard::keyMap[GLFW_KEY_LEFT_SHIFT]) {
 		transform.position -= up * velocity;
 	}
+
+	
+}
+
+void Player::update() {
+	if (Keyboard::keyboardActive) {
+		handleInput();
+	}
+	if (parent) {
+		transform.position = parent->transform.position;
+		parent->transform.rotation = transform.rotation;
+	}
+	updateVectors();
 }

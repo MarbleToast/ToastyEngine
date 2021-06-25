@@ -19,7 +19,8 @@ namespace Keyboard {
 		{GLFW_KEY_D, false},
 		{GLFW_KEY_LEFT_SHIFT, false},
 		{GLFW_KEY_SPACE, false},
-	};;
+		{GLFW_KEY_LEFT_CONTROL, false},
+	};
 	inline bool keyboardActive = false;
 
 	inline auto addListener(GameObject& obj) -> void {

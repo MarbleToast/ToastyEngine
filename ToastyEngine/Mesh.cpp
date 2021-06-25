@@ -44,6 +44,10 @@ void Mesh::Draw(Shader& shader) {
     glActiveTexture(GL_TEXTURE0);
 }
 
+void Mesh::release() {
+    vertices.clear();
+}
+
 void Mesh::setupMesh() {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);

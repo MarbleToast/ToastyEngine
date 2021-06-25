@@ -1,6 +1,7 @@
 #pragma once
 #include "Texture.h"
 #include "Mesh.h"
+#include "BoundingBox.h"
 
 #include <vector>
 #include <string>
@@ -10,9 +11,13 @@
 
 class Model {
     public:
-        Model(const std::string_view path) {
+        std::string modelName;
+        BoundingBox bounds{ {0, 0, 0}, {0, 0, 0} };
+
+        Model(const std::string_view path) : modelName(path.substr(path.find_last_of("/\\") + 1)) {
             loadModel(path);
         }
+
         void Draw(Shader& shader) noexcept;
         void release();
     private:

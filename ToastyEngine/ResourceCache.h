@@ -38,15 +38,38 @@ namespace ResourceCache {
     inline void releaseAll() {
         // Release all textures in a material
 
-        for (auto i : materialCache) 
+        for (const auto& i : materialCache) {
             i.second->release();
-
+        }
+        materialCache.clear();
+            
         // Release models (and all their meshes)
-        for (auto j : modelCache)
+        for (const auto& j : modelCache) {
             j.second->release();
-
-        for (auto j : shaderCache)
+        }
+        modelCache.clear();
+            
+        for (const auto& j : shaderCache) {
             releaseShader(j.second.id);
+        }
+        shaderCache.clear();
+    }
+
+    inline std::optional<ModelPtr> getModel(const std::string_view path) {
+        Diagnostics::Log("[{}] Looking for cached model {}...", __FUNCTION__, path);
+        const auto res = modelCache.find(path.data());
+        if (res != modelCache.end())
+            return res->second;
+        return {};
+    }
+
+    inline ModelPtr loadModel(const std::string_view path) {
+        const auto cachedId = getModel(path);
+        if (cachedId) return *cachedId;
+
+        Diagnostics::Log("[{}] Loading model {}...", __FUNCTION__, path);
+
+        return modelCache.try_emplace(path.data(), std::make_shared<Model>(path.data())).first->second;
     }
 
     inline std::optional<size_t> getTexture(const std::string_view path) {

@@ -116,16 +116,24 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     }
 
     aiString diffuseTexName;
-    material->GetTexture(aiTextureType_DIFFUSE, 0, &diffuseTexName);
+    if (material->GetTexture(aiTextureType_DIFFUSE, 0, &diffuseTexName) == AI_FAILURE) {
+        Diagnostics::Throw("[{}] Diffuse texture get returned failure.", __FUNCTION__);
+    }
 
     aiString normalTexName;
-    material->GetTexture(aiTextureType_HEIGHT, 0, &normalTexName);
+    if (!material->GetTexture(aiTextureType_HEIGHT, 0, &normalTexName) == AI_FAILURE) {
+        Diagnostics::Throw("[{}] Normal map texture get returned failure.", __FUNCTION__);
+    }
 
     aiString specularTexName;
-    material->GetTexture(aiTextureType_SPECULAR, 0, &specularTexName);
+    if (!material->GetTexture(aiTextureType_SPECULAR, 0, &specularTexName) == AI_FAILURE) {
+        Diagnostics::Throw("[{}] Specular map texture get returned failure.", __FUNCTION__);
+    }
 
     aiString displacementTexName;
-    material->GetTexture(aiTextureType_SHININESS, 0, &displacementTexName);
+    if (!material->GetTexture(aiTextureType_SHININESS, 0, &displacementTexName) == AI_FAILURE) {
+        Diagnostics::Throw("[{}] Displacement texture get returned failure.", __FUNCTION__);
+    }
 
     MaterialPtr newMaterial = ResourceCache::createMaterial(
         materialName,
@@ -140,6 +148,8 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 }
 
 void Model::release() {
-    for (auto &m : meshes)
+    for (auto& m : meshes) {
         ResourceCache::releaseVertexBuffer(m.VAO);
+        m.release();
+    }
 }

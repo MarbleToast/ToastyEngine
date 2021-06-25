@@ -26,6 +26,7 @@ class Mesh {
 
         Mesh(std::vector<MeshVertex> vertices, std::vector<unsigned int> indices, MaterialPtr material);
         void Draw(Shader& shader);
+        void release();
 
         unsigned int VAO;
 
