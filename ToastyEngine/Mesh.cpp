@@ -37,6 +37,7 @@ void Mesh::Draw(Shader& shader) {
     }
     
     // draw mesh
+
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
@@ -45,6 +46,11 @@ void Mesh::Draw(Shader& shader) {
 }
 
 void Mesh::release() {
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteVertexArrays(1, &VBO);
+    glDeleteVertexArrays(1, &EBO);
+
+    indices.clear();
     vertices.clear();
 }
 

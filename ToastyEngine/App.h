@@ -50,6 +50,8 @@ class Application {
 		~Application() {
 			delete window;
 			ResourceCache::releaseAll();
+			Keyboard::listenerStack.clear();
+
 			glfwTerminate();
 		}
 };

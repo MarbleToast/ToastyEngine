@@ -149,7 +149,6 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 
 void Model::release() {
     for (auto& m : meshes) {
-        ResourceCache::releaseVertexBuffer(m.VAO);
         m.release();
     }
 }
